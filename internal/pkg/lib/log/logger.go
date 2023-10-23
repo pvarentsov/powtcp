@@ -5,12 +5,25 @@ import (
 	"os"
 )
 
+// Level - logging level
+type Level int
+
+// Level - base levels
+const (
+	LevelDebug Level = -4
+	LevelInfo  Level = 0
+	LevelWarn  Level = 4
+	LevelError Level = 8
+)
+
+// Opts - options to create new logger instance
 type Opts struct {
-	Debug  bool
+	Level  Level
 	Json   bool
 	Writer *os.File
 }
 
+// New - create new logger instance
 func New(opts Opts) (logger *slog.Logger) {
 	writer := opts.Writer
 	if writer == nil {
@@ -18,9 +31,7 @@ func New(opts Opts) (logger *slog.Logger) {
 	}
 
 	level := new(slog.LevelVar)
-	if opts.Debug {
-		level.Set(slog.LevelDebug)
-	}
+	level.Set(slog.Level(opts.Level))
 
 	handlerOpts := &slog.HandlerOptions{
 		Level: level,

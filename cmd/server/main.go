@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/pvarentsov/powtcp/internal/lib/log"
-	"github.com/pvarentsov/powtcp/internal/server"
+	"github.com/pvarentsov/powtcp/internal/app/server"
+	"github.com/pvarentsov/powtcp/internal/pkg/lib/log"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	logger := log.New(log.Opts{
-		Debug: true,
+		Level: log.LevelDebug,
 		Json:  false,
 	})
 
