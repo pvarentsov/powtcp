@@ -9,7 +9,6 @@ import (
 )
 
 func Test_Cache(t *testing.T) {
-
 	t.Run("Cache[string, string] ok", func(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
 		logger := &mockLogger{}
@@ -52,12 +51,4 @@ func Test_Cache(t *testing.T) {
 		time.Sleep(50 * time.Millisecond)
 		require.True(t, logger.cancelSignalHandled)
 	})
-}
-
-type mockLogger struct {
-	cancelSignalHandled bool
-}
-
-func (l *mockLogger) Debug(msg string, args ...any) {
-	l.cancelSignalHandled = msg == "context canceled"
 }

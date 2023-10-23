@@ -7,7 +7,6 @@ import (
 )
 
 func Test_Message(t *testing.T) {
-
 	t.Run("Parse message ok", func(t *testing.T) {
 		act, err := ParseMessage("0:error")
 		require.NoError(t, err)

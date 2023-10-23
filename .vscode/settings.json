@@ -1,6 +1,6 @@
 {
-    "explorer.experimental.fileNesting.patterns": {
-        "*.go": "${capture}_test.go",
+    "explorer.fileNesting.patterns": {
+        "*.go": "${capture}_test.go, ${capture}_mock.go",
         "go.mod": "go.sum"
     }
 }
