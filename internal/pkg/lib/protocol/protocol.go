@@ -1,6 +1,9 @@
 package protocol
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Command - command type
 type Command int8
@@ -26,6 +29,11 @@ const (
 type Message struct {
 	Command Command
 	Payload string
+}
+
+// String - implements stringer interface
+func (m Message) String() string {
+	return fmt.Sprintf("%d:%s", m.Command, m.Payload)
 }
 
 // ParseMessage - parse message from string
