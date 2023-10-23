@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -19,6 +18,7 @@ func Listen(ctx context.Context, opts Opts) (server *Server, err error) {
 	server = &Server{
 		listener: listener,
 		logger:   opts.Logger,
+		service:  opts.Service,
 	}
 
 	server.shutdownWg.Add(1)
@@ -31,12 +31,14 @@ func Listen(ctx context.Context, opts Opts) (server *Server, err error) {
 type Opts struct {
 	Address string
 	Logger  Logger
+	Service Service
 }
 
 // Sever - tcp server
 type Server struct {
 	listener net.Listener
 	logger   Logger
+	service  Service
 
 	shutdownWg    sync.WaitGroup
 	isShutingDown atomic.Bool
@@ -70,24 +72,18 @@ func (s *Server) acceptConnections(ctx context.Context) {
 	defer s.shutdownWg.Done()
 
 	for {
-		select {
-		case <-ctx.Done():
-			s.logger.Debug("context canceled", "op", op)
-			return
-		default:
-			conn, err := s.listener.Accept()
-			if err != nil {
-				if s.isShutingDown.Load() {
-					s.logger.Debug("server closed", "op", op)
-					return
-				}
-
-				s.logger.Warn(err.Error(), "op", op)
-				continue
+		conn, err := s.listener.Accept()
+		if err != nil {
+			if s.isShutingDown.Load() {
+				s.logger.Debug("server closed", "op", op)
+				return
 			}
 
-			go s.handleConnection(conn)
+			s.logger.Error(err.Error(), "op", op)
+			continue
 		}
+
+		go s.handleConnection(conn)
 	}
 }
 
@@ -95,13 +91,12 @@ func (s *Server) handleConnection(conn net.Conn) {
 	const op = "server.handleConnection"
 	defer conn.Close()
 
+	conn.SetReadDeadline(time.Now().Add(time.Minute))
+
 	if s.isShutingDown.Load() {
 		s.logger.Error("server closed", "op", op)
 		return
 	}
 
-	_, err := conn.Write([]byte("Hi from server!"))
-	if err != nil {
-		s.logger.Error(fmt.Sprintf("sent message: %v", err), "op", op)
-	}
+	s.service.HandleMessages(conn.LocalAddr().String(), conn)
 }

@@ -1,4 +1,4 @@
-package protocol
+package message
 
 import (
 	"fmt"
@@ -25,34 +25,31 @@ const (
 	CommandResponseResource
 )
 
-// Message - message with command and payload
-type Message struct {
-	Command Command
-	Payload string
-}
+const (
+	// DelimiterMessage - sign to devide messages from each other
+	DelimiterMessage = '\n'
 
-// String - implements stringer interface
-func (m Message) String() string {
-	return fmt.Sprintf("%d:%s", m.Command, m.Payload)
-}
+	// DelimiterCommand - sign to devide command and payload in message
+	DelimiterCommand = ':'
+)
 
 // ParseMessage - parse message from string
-// String format - "command:payload" where command could be 0-4
+// string has "command:payload" format where command could be 0-4
 func ParseMessage(msg string) (m Message, err error) {
 	if len(msg) < 2 {
 		return m, ErrIncorrectMessageFormat
 	}
 
 	switch msg[:2] {
-	case "0:":
+	case fmt.Sprintf("0%c", DelimiterCommand):
 		m.Command = CommandError
-	case "1:":
+	case fmt.Sprintf("1%c", DelimiterCommand):
 		m.Command = CommandRequestPuzzle
-	case "2:":
+	case fmt.Sprintf("2%c", DelimiterCommand):
 		m.Command = CommandResponsePuzzle
-	case "3:":
+	case fmt.Sprintf("3%c", DelimiterCommand):
 		m.Command = CommandRequestResource
-	case "4:":
+	case fmt.Sprintf("4%c", DelimiterCommand):
 		m.Command = CommandResponseResource
 	default:
 		return m, ErrIncorrectMessageFormat
@@ -63,4 +60,20 @@ func ParseMessage(msg string) (m Message, err error) {
 	}
 
 	return
+}
+
+// Message - message with command and payload
+type Message struct {
+	Command Command
+	Payload string
+}
+
+// String - format message as string
+func (m Message) String() string {
+	return fmt.Sprintf("%d%c%s", m.Command, DelimiterCommand, m.Payload)
+}
+
+// Bytes - format message as bytes
+func (m Message) Bytes() []byte {
+	return []byte(m.String())
 }

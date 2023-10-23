@@ -8,6 +8,8 @@ import (
 
 	"github.com/pvarentsov/powtcp/internal/app/server"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/log"
+	"github.com/pvarentsov/powtcp/internal/pkg/lib/tcp"
+	"github.com/pvarentsov/powtcp/internal/pkg/service"
 )
 
 func main() {
@@ -19,9 +21,15 @@ func main() {
 		Json:  false,
 	})
 
+	service := service.NewServer(service.ServerOpts{
+		Logger:       logger,
+		ErrorChecker: tcp.NewConnErrorChecker(),
+	})
+
 	server, err := server.Listen(ctx, server.Opts{
 		Address: ":8080",
 		Logger:  logger,
+		Service: service,
 	})
 	if err != nil {
 		logger.Error(err.Error(), "op", op)
