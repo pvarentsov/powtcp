@@ -39,22 +39,62 @@ func (s *Server) HandleMessages(clientID string, rw io.ReadWriter) {
 		rawMsg, err := msgReader.ReadString(message.DelimiterMessage)
 		if err != nil {
 			s.logger.Error(err.Error(), "op", op, "clientID", clientID)
+
 			if s.errorChecker.IsTimeout(err) {
-				rw.Write(errorMessage(ErrTimeoutExceeded).Bytes())
+				s.responseError(clientID, ErrTimeoutExceeded, rw)
 				return
 			}
 
-			rw.Write(errorMessage(ErrInternalError).Bytes())
+			s.responseError(clientID, ErrInternalError, rw)
 			return
 		}
 
 		msg, err := message.ParseMessage(rawMsg)
 		if err != nil {
 			s.logger.Error(err.Error(), "op", op, "clientID", clientID)
-			rw.Write(errorMessage(ErrIncorrectMessageFormat).Bytes())
+			s.responseError(clientID, ErrIncorrectMessageFormat, rw)
 			return
 		}
 
-		rw.Write(msg.Bytes())
+		switch msg.Command {
+		case message.CommandRequestPuzzle:
+			s.responsePuzzle(clientID, msg.Payload, rw)
+		case message.CommandRequestResource:
+			s.responseResource(clientID, msg.Payload, rw)
+		default:
+			s.responseError(clientID, ErrIncorrectMessageFormat, rw)
+		}
+	}
+}
+
+func (s *Server) responsePuzzle(clientID string, payload string, w io.Writer) {
+	const op = "service.Server.responsePuzzle"
+
+	msg := message.Message{
+		Command: message.CommandResponsePuzzle,
+	}
+
+	if _, err := w.Write(msg.Bytes()); err != nil {
+		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
+	}
+}
+
+func (s *Server) responseResource(clientID string, payload string, w io.Writer) {
+	const op = "service.Server.responseResource"
+
+	msg := message.Message{
+		Command: message.CommandResponseResource,
+	}
+
+	if _, err := w.Write(msg.Bytes()); err != nil {
+		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
+	}
+}
+
+func (s *Server) responseError(clientID string, handleErr error, w io.Writer) {
+	const op = "service.Server.responseError"
+
+	if _, err := w.Write(errorMessage(handleErr).Bytes()); err != nil {
+		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 	}
 }

@@ -10,6 +10,7 @@ import (
 var (
 	ErrIncorrectMessageFormat = errors.New("incorrect message format")
 	ErrTimeoutExceeded        = errors.New("timeout exceeded")
+	ErrUnknownCommand         = errors.New("unknown command")
 	ErrInternalError          = errors.New("internal error")
 )
 
