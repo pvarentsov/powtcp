@@ -67,6 +67,7 @@ func (c *Cache[K, V]) Get(k K) (v V, ok bool) {
 func (c *Cache[K, V]) ClearExpired() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	
 	for k, v := range c.cache {
 		if !v.actual() {
 			delete(c.cache, k)
@@ -76,14 +77,16 @@ func (c *Cache[K, V]) ClearExpired() {
 
 func (c *Cache[K, V]) runCleaner(ctx context.Context, interval int) {
 	const op = "cache.runCleaner"
-	tickerC := time.After(time.Duration(interval) * time.Millisecond)
+
+	ticker := time.NewTicker(time.Duration(interval) * time.Millisecond)
+	defer ticker.Stop()
 
 	for {
 		select {
 		case <-ctx.Done():
 			c.logger.Debug("context canceled", "op", op)
 			return
-		case <-tickerC:
+		case <-ticker.C:
 			c.logger.Debug("clean cache", "op", op)
 			c.ClearExpired()
 		}
