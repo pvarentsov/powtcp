@@ -38,8 +38,8 @@ type Cache[K comparable, V any] struct {
 	logger Logger
 }
 
-// Add - add value by key with time expiration
-func (c *Cache[K, V]) Add(k K, v V, exp time.Time) {
+// AddWithExp - add value by key with time expiration
+func (c *Cache[K, V]) AddWithExp(k K, v V, exp time.Time) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -47,6 +47,24 @@ func (c *Cache[K, V]) Add(k K, v V, exp time.Time) {
 		data: v,
 		exp:  exp.UnixNano(),
 	}
+}
+
+// Add - add value by key
+func (c *Cache[K, V]) Add(k K, v V) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.cache[k] = value[V]{
+		data: v,
+	}
+}
+
+// Delete - delete value by key
+func (c *Cache[K, V]) Delete(k K) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	delete(c.cache, k)
 }
 
 // Add - get actual value by key
@@ -63,11 +81,39 @@ func (c *Cache[K, V]) Get(k K) (v V, ok bool) {
 	return v, false
 }
 
+// Keys - get cache keys
+func (c *Cache[K, V]) Keys() (keys []K) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for k, v := range c.cache {
+		if v.actual() {
+			keys = append(keys, k)
+		}
+	}
+
+	return
+}
+
+// Keys - get cache values
+func (c *Cache[K, V]) Values() (values []V) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for _, v := range c.cache {
+		if v.actual() {
+			values = append(values, v.data)
+		}
+	}
+
+	return
+}
+
 // ClearExpired - clear expired keys
 func (c *Cache[K, V]) ClearExpired() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	
+
 	for k, v := range c.cache {
 		if !v.actual() {
 			delete(c.cache, k)
@@ -99,5 +145,5 @@ type value[V any] struct {
 }
 
 func (v value[V]) actual() bool {
-	return time.Now().UnixNano() < v.exp
+	return v.exp == 0 || time.Now().UnixNano() < v.exp
 }

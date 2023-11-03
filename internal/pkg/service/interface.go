@@ -2,10 +2,11 @@ package service
 
 import "time"
 
-// Cache - cache interface
-type Cache interface {
-	Add(k, v string, exp time.Time)
-	Get(k string) (v string, ok bool)
+// PuzzleCache - puzzle cache interface
+type PuzzleCache interface {
+	AddWithExp(k string, v struct{}, exp time.Time)
+	Get(k string) (v struct{}, ok bool)
+	Delete(k string)
 }
 
 // Logger - logger interface

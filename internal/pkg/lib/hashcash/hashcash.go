@@ -47,6 +47,16 @@ type Hashcash struct {
 	counter   int
 }
 
+// Bits - returns zero bits count
+func (h *Hashcash) Bits() int {
+	return h.bits
+}
+
+// EqualResource - chech if input resource is equal with hashcash resource
+func (h *Hashcash) EqualResource(resource string) bool {
+	return h.resource == resource
+}
+
 // Compute - compute hash with enough zero bits in the begining
 // Increase counter while hash is not correct
 func (h *Hashcash) Compute(maxAttempts int) error {

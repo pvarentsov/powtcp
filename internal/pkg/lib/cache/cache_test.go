@@ -19,12 +19,12 @@ func Test_Cache(t *testing.T) {
 		})
 
 		// Add and read actual value
-		c.Add("1", "1", time.Now().Add(100*time.Millisecond))
+		c.AddWithExp("1", "1", time.Now().Add(100*time.Millisecond))
 		act, ok := c.Get("1")
 		require.Equal(t, "1", act)
 		require.True(t, ok)
 
-		c.Add("2", "2", time.Now().Add(100*time.Millisecond))
+		c.AddWithExp("2", "2", time.Now().Add(100*time.Millisecond))
 		act, ok = c.Get("2")
 		require.Equal(t, "2", act)
 		require.True(t, ok)
