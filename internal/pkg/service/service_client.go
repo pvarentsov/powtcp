@@ -63,13 +63,11 @@ func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource st
 }
 
 func (c *Client) request(clientID string, msg message.Message, rw io.ReadWriter) (payload string, err error) {
-	msgReader := bufio.NewReader(rw)
-
 	if err = c.writeMsg(clientID, msg, rw); err != nil {
 		return
 	}
 
-	rawResMsg, err := msgReader.ReadString(message.DelimiterMessage)
+	rawResMsg, err := bufio.NewReader(rw).ReadString(message.DelimiterMessage)
 	if err != nil {
 		return
 	}
