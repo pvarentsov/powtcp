@@ -26,6 +26,7 @@ type Client struct {
 	logger Logger
 }
 
+// RequestResource - request server resource
 func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource string, err error) {
 	const op = "service.Client.RequestResource"
 
@@ -44,7 +45,7 @@ func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource st
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
-	if err = hashcash.Compute(100000); err != nil {
+	if err = hashcash.Compute(1000000); err != nil {
 		return
 	}
 

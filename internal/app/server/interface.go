@@ -10,7 +10,7 @@ type Logger interface {
 	Debug(msg string, args ...any)
 }
 
-// Service - service to handle client messages
+// Service - server service to handle client messages
 type Service interface {
 	HandleMessages(clientID string, rw io.ReadWriter)
 }

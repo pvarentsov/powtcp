@@ -36,6 +36,8 @@ const (
 // ParseMessage - parse message from string
 // string has "command:payload" format where command could be 0-4
 func ParseMessage(msg string) (m Message, err error) {
+	msg = strings.TrimSpace(msg)
+
 	if len(msg) < 2 {
 		return m, ErrIncorrectMessageFormat
 	}
@@ -70,7 +72,7 @@ type Message struct {
 
 // String - format message as string
 func (m Message) String() string {
-	return fmt.Sprintf("%d%c%s", m.Command, DelimiterCommand, m.Payload)
+	return fmt.Sprintf("%d%c%s%c", m.Command, DelimiterCommand, m.Payload, DelimiterMessage)
 }
 
 // Bytes - format message as bytes

@@ -7,13 +7,14 @@ import (
 	"syscall"
 
 	"github.com/pvarentsov/powtcp/internal/app/server"
+	"github.com/pvarentsov/powtcp/internal/pkg/lib/cache"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/log"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/tcp"
 	"github.com/pvarentsov/powtcp/internal/pkg/service"
 )
 
 func main() {
-	op := "main"
+	op := "server.main"
 	ctx, cancel := context.WithCancel(context.Background())
 
 	logger := log.New(log.Opts{
@@ -21,8 +22,14 @@ func main() {
 		Json:  false,
 	})
 
+	puzzleCache := cache.New[string, struct{}](ctx, cache.Opts{
+		CleanInterval: 2000,
+		Logger:        logger,
+	})
+
 	service := service.NewServer(service.ServerOpts{
 		Logger:       logger,
+		PuzzleCache:  puzzleCache,
 		ErrorChecker: tcp.NewConnErrorChecker(),
 	})
 

@@ -72,7 +72,7 @@ func (s *Server) HandleMessages(clientID string, rw io.ReadWriter) {
 func (s *Server) responsePuzzle(clientID string, payload string, w io.Writer) {
 	const op = "service.Server.responsePuzzle"
 
-	hashcash, err := hashcash.New(5, clientID)
+	hashcash, err := hashcash.New(4, clientID)
 	if err != nil {
 		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		s.writeError(clientID, ErrIncorrectMessageFormat, w)

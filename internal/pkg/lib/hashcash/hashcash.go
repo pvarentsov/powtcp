@@ -98,8 +98,18 @@ func (h *Hashcash) Header() Header {
 // ParseHeader - parses hashcah from header
 func ParseHeader(header string) (hashcash *Hashcash, err error) {
 	parts := strings.Split(header, ":")
-	if len(parts) != 7 {
+
+	if len(parts) < 7 {
 		return nil, ErrIncorrectHeaderFormat
+	}
+	if len(parts) > 7 {
+		for i := 0; i < len(parts)-7; i++ {
+			parts[3] += ":" + parts[3+i+1]
+		}
+		parts[4] = parts[len(parts)-3]
+		parts[5] = parts[len(parts)-2]
+		parts[6] = parts[len(parts)-1]
+		parts = parts[:7]
 	}
 	if parts[0] != "1" {
 		return nil, ErrIncorrectHeaderFormat
@@ -139,7 +149,7 @@ func ParseHeader(header string) (hashcash *Hashcash, err error) {
 }
 
 // Header - string presentation of hashcash
-// Format - bits:date:resource:externsion:salt:counter
+// Format - 1:bits:date:resource:externsion:salt:counter
 type Header string
 
 // IsHashCorrect - does header hash constain zero bits enough

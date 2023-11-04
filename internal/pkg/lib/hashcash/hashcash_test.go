@@ -8,7 +8,7 @@ import (
 
 func Test_New(t *testing.T) {
 	t.Run("new and parse ok", func(t *testing.T) {
-		original, err := New(20, "resource")
+		original, err := New(20, ":reso:u:r:ce:")
 		require.NoError(t, err)
 
 		parsed, err := ParseHeader(string(original.Header()))
