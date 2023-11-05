@@ -28,6 +28,9 @@ run-server:
 run-client:
 	@./bin/client
 
+powtcp:
+	@docker-compose up --build
+
 test:
 	@go test ./... -v
 

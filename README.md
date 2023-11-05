@@ -2,6 +2,9 @@
 
 > Proof of Work protected TCP server.
 
+<p align="center"> 
+  <img src="assets/demo.png">
+</p>
 
 ### Makefile
 
