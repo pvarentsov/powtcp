@@ -1,6 +1,8 @@
 package client
 
-import "io"
+import (
+	"io"
+)
 
 // Config - config interface
 type Config interface {

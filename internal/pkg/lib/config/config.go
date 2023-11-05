@@ -12,14 +12,16 @@ import (
 // Config - config structure
 type Config struct {
 	Server struct {
-		Address           string `yaml:"address"`
 		LogLevel          int    `yaml:"log_level"`
+		LogJson           bool   `yaml:"log_json"`
+		Address           string `yaml:"address"`
 		ShutdownTimeout   int    `yaml:"shutdown_timeout"`
 		ConnectionTimeout int    `yaml:"connection_timeout"`
 	} `yaml:"server"`
 
 	Client struct {
-		LogLevel int `yaml:"log_level"`
+		LogLevel int  `yaml:"log_level"`
+		LogJson  bool `yaml:"log_json"`
 	} `yaml:"client"`
 
 	Hashcash struct {

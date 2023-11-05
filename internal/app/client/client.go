@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -18,20 +17,16 @@ func Connect(opts Opts) error {
 
 	conn, err := net.Dial("tcp", opts.Config.Address())
 	if err != nil {
-		opts.Logger.Info(err.Error(), "op", op)
+		opts.Logger.Error(err.Error(), "op", op)
 		return err
 	}
 
 	defer conn.Close()
 
-	resource, err := opts.Service.RequestResource(conn.LocalAddr().String(), conn)
+	_, err = opts.Service.RequestResource(conn.LocalAddr().String(), conn)
 	if err != nil {
-		opts.Logger.Info(err.Error(), "op", op)
 		return err
 	}
-
-	msg := fmt.Sprintf("received resource: %s", resource)
-	opts.Logger.Info(msg, "op", op)
 
 	return nil
 }

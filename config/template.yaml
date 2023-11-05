@@ -1,12 +1,15 @@
 server:
-  # host:port
-  address: 127.0.0.1:8080
-
   # debug -4
   # info   0
   # warn   4 
   # error  8
   log_level: 0
+
+  # true|false
+  log_json: false
+
+  # host:port
+  address: 127.0.0.1:8080
 
   # in ms
   shutdown_timeout: 2000
@@ -23,6 +26,9 @@ client:
   # warn   4 
   # error  8
   log_level: 0
+
+  # true|false
+  log_json: false
 
 hashcash:
   # number of zero bits in hashed code

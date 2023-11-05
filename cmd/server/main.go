@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,22 +16,21 @@ import (
 )
 
 func main() {
-	op := "server.main"
 	ctx, cancel := context.WithCancel(context.Background())
-
-	logger := log.New(log.Opts{
-		Level: log.LevelDebug,
-		Json:  false,
-	})
 
 	config, err := config.ParseByFlag("config")
 	if err != nil {
-		logger.Error(err.Error(), "op", op)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
 	configService := newConfigService(config)
 	configServer := newConfigServer(config)
+
+	logger := log.New(log.Opts{
+		Level: log.Level(config.Server.LogLevel),
+		Json:  false,
+	})
 
 	puzzleCache := cache.New[string, struct{}](ctx, cache.Opts{
 		CleanInterval: configService.PuzzleTTL(),
@@ -50,7 +50,7 @@ func main() {
 		Service: service,
 	})
 	if err != nil {
-		logger.Error(err.Error(), "op", op)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 

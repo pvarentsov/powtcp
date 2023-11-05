@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/pvarentsov/powtcp/internal/app/client"
@@ -10,31 +11,32 @@ import (
 )
 
 func main() {
-	op := "server.main"
-
-	logger := log.New(log.Opts{
-		Level: log.LevelDebug,
-		Json:  false,
-	})
-
 	config, err := config.ParseByFlag("config")
 	if err != nil {
-		logger.Error(err.Error(), "op", op)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
+	configService := newConfigService(config)
+	configClient := newConfigClient(config)
+
+	logger := log.New(log.Opts{
+		Level: log.Level(config.Client.LogLevel),
+		Json:  false,
+	})
+
 	service := service.NewClient(service.ClientOpts{
-		Config: newConfigService(config),
+		Config: configService,
 		Logger: logger,
 	})
 
 	err = client.Connect(client.Opts{
-		Config:  newConfigClient(config),
+		Config:  configClient,
 		Logger:  logger,
 		Service: service,
 	})
 	if err != nil {
-		logger.Error(err.Error(), "op", op)
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 }

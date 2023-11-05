@@ -43,11 +43,11 @@ func (s *Server) HandleMessages(clientID string, rw io.ReadWriter) {
 	for {
 		rawMsg, err := msgReader.ReadString(message.DelimiterMessage)
 		if err != nil {
-			s.logger.Error(err.Error(), "op", op, "clientID", clientID)
-
 			clientErr := ErrInternalError
 			if s.errorChecker.IsTimeout(err) {
 				clientErr = ErrTimeoutExceeded
+			} else {
+				s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 			}
 			s.writeError(clientID, clientErr, rw)
 
@@ -73,11 +73,8 @@ func (s *Server) HandleMessages(clientID string, rw io.ReadWriter) {
 }
 
 func (s *Server) responsePuzzle(clientID string, payload string, w io.Writer) {
-	const op = "service.Server.responsePuzzle"
-
 	hashcash, err := hashcash.New(s.config.PuzzleZeroBits(), clientID)
 	if err != nil {
-		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		s.writeError(clientID, ErrIncorrectMessageFormat, w)
 		return
 	}
@@ -98,7 +95,6 @@ func (s *Server) responseResource(clientID string, payload string, w io.Writer) 
 
 	hashcash, err := hashcash.ParseHeader(payload)
 	if err != nil {
-		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		s.writeError(clientID, ErrIncorrectMessageFormat, w)
 		return
 	}
@@ -118,7 +114,7 @@ func (s *Server) responseResource(clientID string, payload string, w io.Writer) 
 
 	isHashCorrect, err := hashcash.Header().IsHashCorrect(hashcash.Bits())
 	if err != nil {
-		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
+		s.logger.Error(err.Error(), "op", op)
 		s.writeError(clientID, ErrInternalError, w)
 		return
 	}

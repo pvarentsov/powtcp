@@ -3,6 +3,7 @@ package service
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/hashcash"
@@ -62,6 +63,9 @@ func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource st
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
+
+	msg := fmt.Sprintf("received resource: %s", resource)
+	c.logger.Info(msg, "op", op, "clientID", clientID)
 
 	return
 }
