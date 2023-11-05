@@ -1,0 +1,14 @@
+server:
+  address: 127.0.0.1:8080
+
+  # debug -4
+  # info   0
+  # warn   4 
+  # error  8
+  logLevel: 0
+
+  # in ms
+  shutdownTimeout: 2000
+
+  # in ms
+  connectionTimeout: 60000

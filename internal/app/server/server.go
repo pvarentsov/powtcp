@@ -61,7 +61,7 @@ func (s *Server) Shutdown() {
 	case <-done:
 		s.logger.Debug("shutdown server gracefully", "op", op)
 		return
-	case <-time.After(2 * time.Second):
+	case <-time.After(2000 * time.Millisecond):
 		s.logger.Debug("shutdown server by timeout", "op", op)
 		return
 	}
@@ -91,7 +91,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	const op = "server.handleConnection"
 	defer conn.Close()
 
-	conn.SetReadDeadline(time.Now().Add(time.Minute))
+	conn.SetReadDeadline(time.Now().Add(60000 * time.Millisecond))
 
 	if s.isShutingDown.Load() {
 		s.logger.Error("server closed", "op", op)
