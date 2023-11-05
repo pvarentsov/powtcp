@@ -8,6 +8,7 @@ import (
 
 	"github.com/pvarentsov/powtcp/internal/app/server"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/cache"
+	"github.com/pvarentsov/powtcp/internal/pkg/lib/config"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/log"
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/tcp"
 	"github.com/pvarentsov/powtcp/internal/pkg/service"
@@ -22,19 +23,29 @@ func main() {
 		Json:  false,
 	})
 
+	config, err := config.ParseByFlag("config")
+	if err != nil {
+		logger.Error(err.Error(), "op", op)
+		os.Exit(1)
+	}
+
+	configService := newConfigService(config)
+	configServer := newConfigServer(config)
+
 	puzzleCache := cache.New[string, struct{}](ctx, cache.Opts{
-		CleanInterval: 2000,
+		CleanInterval: configService.PuzzleTTL(),
 		Logger:        logger,
 	})
 
 	service := service.NewServer(service.ServerOpts{
+		Config:       configService,
 		Logger:       logger,
 		PuzzleCache:  puzzleCache,
 		ErrorChecker: tcp.NewConnErrorChecker(),
 	})
 
 	server, err := server.Listen(ctx, server.Opts{
-		Address: ":8080",
+		Config:  configServer,
 		Logger:  logger,
 		Service: service,
 	})

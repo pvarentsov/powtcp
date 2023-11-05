@@ -1,6 +1,16 @@
 package server
 
-import "io"
+import (
+	"io"
+	"time"
+)
+
+// Config - config interface
+type Config interface {
+	Address() string
+	ShutdownTimeout() time.Duration
+	ConnectionTimeout() time.Duration
+}
 
 // Logger - logger interface
 type Logger interface {

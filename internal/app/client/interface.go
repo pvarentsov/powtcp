@@ -2,6 +2,11 @@ package client
 
 import "io"
 
+// Config - config interface
+type Config interface {
+	Address() string
+}
+
 // Logger - logger interface
 type Logger interface {
 	Info(msg string, args ...any)

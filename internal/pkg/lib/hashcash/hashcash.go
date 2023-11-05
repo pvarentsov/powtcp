@@ -20,7 +20,7 @@ const (
 
 // New - returns new hashcash
 func New(bits int, resource string) (*Hashcash, error) {
-	salt, err := rand.Int(rand.Reader, big.NewInt(math.MaxInt32))
+	rand, err := rand.Int(rand.Reader, big.NewInt(math.MaxInt32))
 	if err != nil {
 		return nil, err
 	}
@@ -33,32 +33,38 @@ func New(bits int, resource string) (*Hashcash, error) {
 		bits:     bits,
 		date:     time.Now().UTC().Truncate(time.Second),
 		resource: resource,
-		salt:     salt.Bytes(),
+		rand:     rand.Bytes(),
 	}, nil
 }
 
 // Hashcash - hashcash structure
+// Version 1
 type Hashcash struct {
-	bits      int
-	date      time.Time
-	resource  string
-	extension string
-	salt      []byte
-	counter   int
+	bits      int       // number of zero bits in hashed code
+	date      time.Time // time that the message was sent
+	resource  string    // resource data string (IP address,  email address, etc)
+	extension string    // extension, ignored in this version
+	rand      []byte    // random characters
+	counter   int       // computing counter
 }
 
-// Bits - returns zero bits count
+// Bits - returns number of zero bits
 func (h *Hashcash) Bits() int {
 	return h.bits
 }
 
-// EqualResource - chech if input resource is equal with hashcash resource
+// EqualResource - check if input resource is equal with hashcash resource
 func (h *Hashcash) EqualResource(resource string) bool {
 	return h.resource == resource
 }
 
+// IsActual - check if hashcash expiration exceeded ttl
+func (h *Hashcash) IsActual(ttl time.Duration) bool {
+	return h.date.Add(ttl).After(time.Now().UTC())
+}
+
 // Compute - compute hash with enough zero bits in the begining
-// Increase counter while hash is not correct
+// Increase counter if hash does't have enough zero bits in the begining
 func (h *Hashcash) Compute(maxAttempts int) error {
 	if maxAttempts > 0 {
 		h.counter = 0
@@ -78,9 +84,9 @@ func (h *Hashcash) Compute(maxAttempts int) error {
 }
 
 // Key - returns string presentation of hashcash without counter
-// Using to match original hashcash with solved hashcash
+// Key is using to match original hashcash with solved hashcash
 func (h *Hashcash) Key() string {
-	return fmt.Sprintf("%d:%d:%s:%d", h.bits, h.date.Unix(), h.resource, binary.BigEndian.Uint32(h.salt))
+	return fmt.Sprintf("%d:%d:%s:%d", h.bits, h.date.Unix(), h.resource, binary.BigEndian.Uint32(h.rand))
 }
 
 // Header - returns string presentation of hashcash to share it
@@ -90,12 +96,12 @@ func (h *Hashcash) Header() Header {
 		h.date.Format(dateLayout),
 		h.resource,
 		h.extension,
-		base64.StdEncoding.EncodeToString(h.salt),
+		base64.StdEncoding.EncodeToString(h.rand),
 		base64.StdEncoding.EncodeToString([]byte(strconv.Itoa(h.counter))),
 	))
 }
 
-// ParseHeader - parses hashcah from header
+// ParseHeader - parse hashcah from header
 func ParseHeader(header string) (hashcash *Hashcash, err error) {
 	parts := strings.Split(header, ":")
 
@@ -130,7 +136,7 @@ func ParseHeader(header string) (hashcash *Hashcash, err error) {
 	hashcash.resource = parts[3]
 	hashcash.extension = parts[4]
 
-	hashcash.salt, err = base64.StdEncoding.DecodeString(parts[5])
+	hashcash.rand, err = base64.StdEncoding.DecodeString(parts[5])
 	if err != nil {
 		return nil, ErrIncorrectHeaderFormat
 	}
@@ -149,7 +155,7 @@ func ParseHeader(header string) (hashcash *Hashcash, err error) {
 }
 
 // Header - string presentation of hashcash
-// Format - 1:bits:date:resource:externsion:salt:counter
+// Format - 1:bits:date:resource:externsion:rand:counter
 type Header string
 
 // IsHashCorrect - does header hash constain zero bits enough

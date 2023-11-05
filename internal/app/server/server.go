@@ -10,13 +10,14 @@ import (
 
 // Listen - listen tcp connections
 func Listen(ctx context.Context, opts Opts) (server *Server, err error) {
-	listener, err := net.Listen("tcp", opts.Address)
+	listener, err := net.Listen("tcp", opts.Config.Address())
 	if err != nil {
 		return server, err
 	}
 
 	server = &Server{
 		listener: listener,
+		config:   opts.Config,
 		logger:   opts.Logger,
 		service:  opts.Service,
 	}
@@ -29,7 +30,7 @@ func Listen(ctx context.Context, opts Opts) (server *Server, err error) {
 
 // Opts - options to run server
 type Opts struct {
-	Address string
+	Config  Config
 	Logger  Logger
 	Service Service
 }
@@ -37,6 +38,7 @@ type Opts struct {
 // Sever - tcp server
 type Server struct {
 	listener net.Listener
+	config   Config
 	logger   Logger
 	service  Service
 
@@ -61,7 +63,7 @@ func (s *Server) Shutdown() {
 	case <-done:
 		s.logger.Debug("shutdown server gracefully", "op", op)
 		return
-	case <-time.After(2000 * time.Millisecond):
+	case <-time.After(s.config.ShutdownTimeout()):
 		s.logger.Debug("shutdown server by timeout", "op", op)
 		return
 	}
@@ -91,7 +93,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	const op = "server.handleConnection"
 	defer conn.Close()
 
-	conn.SetReadDeadline(time.Now().Add(60000 * time.Millisecond))
+	conn.SetReadDeadline(time.Now().Add(s.config.ConnectionTimeout()))
 
 	if s.isShutingDown.Load() {
 		s.logger.Error("server closed", "op", op)

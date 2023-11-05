@@ -6,13 +6,12 @@ import (
 	"time"
 )
 
-// DefaultCleanInterval - default clean interval in ms
-const DefaultCleanInterval = 3000
+var defaultCleanInterval = 3000 * time.Millisecond
 
 // Opts - options to create new cache instance
 // CleanInterval - uses default if target <= 0
 type Opts struct {
-	CleanInterval int
+	CleanInterval time.Duration
 	Logger        Logger
 }
 
@@ -23,7 +22,7 @@ func New[K comparable, V any](ctx context.Context, opts Opts) *Cache[K, V] {
 		logger: opts.Logger,
 	}
 	if opts.CleanInterval < 0 {
-		opts.CleanInterval = DefaultCleanInterval
+		opts.CleanInterval = defaultCleanInterval
 	}
 
 	go c.runCleaner(ctx, opts.CleanInterval)
@@ -121,10 +120,10 @@ func (c *Cache[K, V]) ClearExpired() {
 	}
 }
 
-func (c *Cache[K, V]) runCleaner(ctx context.Context, interval int) {
+func (c *Cache[K, V]) runCleaner(ctx context.Context, interval time.Duration) {
 	const op = "cache.runCleaner"
 
-	ticker := time.NewTicker(time.Duration(interval) * time.Millisecond)
+	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
 	for {

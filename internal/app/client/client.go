@@ -7,7 +7,7 @@ import (
 
 // Opts - connection options
 type Opts struct {
-	Address string
+	Config  Config
 	Logger  Logger
 	Service Service
 }
@@ -16,7 +16,7 @@ type Opts struct {
 func Connect(opts Opts) error {
 	const op = "client.Connect"
 
-	conn, err := net.Dial("tcp", opts.Address)
+	conn, err := net.Dial("tcp", opts.Config.Address())
 	if err != nil {
 		opts.Logger.Info(err.Error(), "op", op)
 		return err

@@ -19,3 +19,14 @@ type Logger interface {
 type ErrorChecker interface {
 	IsTimeout(err error) bool
 }
+
+// ServerConfig - server config interface
+type ServerConfig interface {
+	PuzzleTTL() time.Duration
+	PuzzleZeroBits() int
+}
+
+// ClientConfig - client config interface
+type ClientConfig interface {
+	PuzzleComputeMaxAttempts() int
+}

@@ -12,18 +12,21 @@ import (
 // Opts - options to create new cache instance
 type ClientOpts struct {
 	Logger Logger
+	Config ClientConfig
 }
 
 // NewClient - create new client-side service
 func NewClient(opts ClientOpts) *Client {
 	return &Client{
 		logger: opts.Logger,
+		config: opts.Config,
 	}
 }
 
 // Client - client-side service
 type Client struct {
 	logger Logger
+	config ClientConfig
 }
 
 // RequestResource - request server resource
@@ -45,7 +48,7 @@ func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource st
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
-	if err = hashcash.Compute(1000000); err != nil {
+	if err = hashcash.Compute(c.config.PuzzleComputeMaxAttempts()); err != nil {
 		return
 	}
 

@@ -17,16 +17,16 @@ help:
 	@echo
 
 build-server:
-	@go build -o ./bin/server ./cmd/server/main.go
+	@go build -o ./bin/server ./cmd/server/*.go
 
 build-client:
-	@go build -o ./bin/client ./cmd/client/main.go	
+	@go build -o ./bin/client ./cmd/client/*.go
 
 run-server:
-	@./bin/server
+	@./bin/server --config ./config/template.yaml
 
 run-client:
-	@./bin/client	
+	@./bin/client --config ./config/template.yaml
 
 test:
 	@go test ./... -v

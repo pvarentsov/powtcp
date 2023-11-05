@@ -2,7 +2,10 @@ module github.com/pvarentsov/powtcp
 
 go 1.20
 
-require github.com/stretchr/testify v1.8.4
+require (
+	github.com/stretchr/testify v1.8.4
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

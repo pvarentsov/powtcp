@@ -12,6 +12,7 @@ import (
 // Opts - options to create new cache instance
 type ServerOpts struct {
 	Logger       Logger
+	Config       ServerConfig
 	PuzzleCache  PuzzleCache
 	ErrorChecker ErrorChecker
 }
@@ -20,6 +21,7 @@ type ServerOpts struct {
 func NewServer(opts ServerOpts) *Server {
 	return &Server{
 		logger:       opts.Logger,
+		config:       opts.Config,
 		puzzleCache:  opts.PuzzleCache,
 		errorChecker: opts.ErrorChecker,
 	}
@@ -28,6 +30,7 @@ func NewServer(opts ServerOpts) *Server {
 // Server - server-side service
 type Server struct {
 	logger       Logger
+	config       ServerConfig
 	puzzleCache  PuzzleCache
 	errorChecker ErrorChecker
 }
@@ -72,14 +75,14 @@ func (s *Server) HandleMessages(clientID string, rw io.ReadWriter) {
 func (s *Server) responsePuzzle(clientID string, payload string, w io.Writer) {
 	const op = "service.Server.responsePuzzle"
 
-	hashcash, err := hashcash.New(4, clientID)
+	hashcash, err := hashcash.New(s.config.PuzzleZeroBits(), clientID)
 	if err != nil {
 		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		s.writeError(clientID, ErrIncorrectMessageFormat, w)
 		return
 	}
 
-	exp := time.Now().Add(120 * time.Second)
+	exp := time.Now().Add(s.config.PuzzleTTL())
 	s.puzzleCache.AddWithExp(hashcash.Key(), struct{}{}, exp)
 
 	msg := message.Message{
@@ -106,6 +109,10 @@ func (s *Server) responseResource(clientID string, payload string, w io.Writer) 
 	}
 	if !hashcash.EqualResource(clientID) {
 		s.writeError(clientID, ErrHashcashHeaderNotFound, w)
+		return
+	}
+	if !hashcash.IsActual(s.config.PuzzleTTL()) {
+		s.writeError(clientID, ErrHashcashExpirationExceeded, w)
 		return
 	}
 
