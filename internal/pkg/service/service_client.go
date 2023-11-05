@@ -3,7 +3,6 @@ package service
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
 
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/hashcash"
@@ -34,38 +33,45 @@ type Client struct {
 func (c *Client) RequestResource(clientID string, rw io.ReadWriter) (resource string, err error) {
 	const op = "service.Client.RequestResource"
 
+	c.logger.Info("connection established", "clientID", clientID)
+
 	puzzleReqMsg := message.Message{
 		Command: message.CommandRequestPuzzle,
 	}
 
+	c.logger.Info("requesting puzzle", "clientID", clientID)
 	puzzle, err := c.request(clientID, puzzleReqMsg, rw)
 	if err != nil {
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
+	c.logger.Info("puzzle received", "clientID", clientID, "puzzle", puzzle)
 
 	hashcash, err := hashcash.ParseHeader(puzzle)
 	if err != nil {
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
+
+	c.logger.Info("solving puzzle", "clientID", clientID)
 	if err = hashcash.Compute(c.config.PuzzleComputeMaxAttempts()); err != nil {
+		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
+	c.logger.Info("puzzle solved", "clientID", clientID, "counter", hashcash.Counter())
 
 	resourceReqMsg := message.Message{
 		Command: message.CommandRequestResource,
 		Payload: string(hashcash.Header()),
 	}
 
+	c.logger.Info("requesting resource", "clientID", clientID)
 	resource, err = c.request(clientID, resourceReqMsg, rw)
 	if err != nil {
 		c.logger.Error(err.Error(), "op", op, "clientID", clientID)
 		return
 	}
-
-	msg := fmt.Sprintf("received resource: %s", resource)
-	c.logger.Info(msg, "op", op, "clientID", clientID)
+	c.logger.Info("resource received", "clientID", clientID, "resource", resource)
 
 	return
 }

@@ -53,6 +53,11 @@ func (h *Hashcash) Bits() int {
 	return h.bits
 }
 
+// Counter - returns counter
+func (h *Hashcash) Counter() int {
+	return h.counter
+}
+
 // EqualResource - check if input resource is equal with hashcash resource
 func (h *Hashcash) EqualResource(resource string) bool {
 	return h.resource == resource
