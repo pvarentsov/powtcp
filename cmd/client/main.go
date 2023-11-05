@@ -30,6 +30,11 @@ func main() {
 		Logger: logger,
 	})
 
+	logger.Debug("client configured",
+		"server_address", configClient.ServerAddress(),
+		"puzzle_compute_max_attempts", configService.PuzzleComputeMaxAttempts(),
+	)
+
 	err = client.Connect(client.Opts{
 		Config:  configClient,
 		Logger:  logger,

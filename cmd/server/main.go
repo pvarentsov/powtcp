@@ -54,6 +54,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	logger.Debug("server started",
+		"address", configServer.Address(),
+		"shutdown_timeout", configServer.ShutdownTimeout(),
+		"connection_timeout", configServer.ConnectionTimeout(),
+		"puzzle_ttl", configService.PuzzleTTL(),
+		"puzzle_zero_bits", configService.PuzzleZeroBits(),
+	)
+
 	signalChannel := make(chan os.Signal, 1)
 	signal.Notify(signalChannel, syscall.SIGINT, syscall.SIGTERM)
 
