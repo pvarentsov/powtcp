@@ -11,25 +11,32 @@ import (
 
 // Config - config structure
 type Config struct {
-	Server struct {
-		LogLevel          int    `yaml:"log_level"`
-		LogJson           bool   `yaml:"log_json"`
-		Address           string `yaml:"address"`
-		ShutdownTimeout   int    `yaml:"shutdown_timeout"`
-		ConnectionTimeout int    `yaml:"connection_timeout"`
-	} `yaml:"server"`
+	Server   `yaml:"server"`
+	Client   `yaml:"client"`
+	Hashcash `yaml:"hashcash"`
+}
 
-	Client struct {
-		LogLevel      int    `yaml:"log_level"`
-		LogJson       bool   `yaml:"log_json"`
-		ServerAddress string `yaml:"server_address"`
-	} `yaml:"client"`
+// Server - server config structure
+type Server struct {
+	LogLevel          int    `yaml:"log_level"`
+	LogJson           bool   `yaml:"log_json"`
+	Address           string `yaml:"address"`
+	ShutdownTimeout   int    `yaml:"shutdown_timeout"`
+	ConnectionTimeout int    `yaml:"connection_timeout"`
+}
 
-	Hashcash struct {
-		Bits               int `yaml:"bits"`
-		ComputeMaxAttempts int `yaml:"compute_max_attempts"`
-		TTL                int `yaml:"ttl"`
-	} `yaml:"hashcash"`
+// Client - client config structure
+type Client struct {
+	LogLevel      int    `yaml:"log_level"`
+	LogJson       bool   `yaml:"log_json"`
+	ServerAddress string `yaml:"server_address"`
+}
+
+// Hashcash - Hashcash config structure
+type Hashcash struct {
+	Bits               int `yaml:"bits"`
+	ComputeMaxAttempts int `yaml:"compute_max_attempts"`
+	TTL                int `yaml:"ttl"`
 }
 
 // ParseByFlag - parse config from file by flag
