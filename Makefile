@@ -23,10 +23,10 @@ build-client:
 	@go build -o ./bin/client ./cmd/client/*.go
 
 run-server:
-	@./bin/server --config ./config/template.yaml
+	@./bin/server
 
 run-client:
-	@./bin/client --config ./config/template.yaml
+	@./bin/client
 
 test:
 	@go test ./... -v

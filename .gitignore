@@ -2,4 +2,4 @@ bin
 .DS_Store
 
 config/*
-!config/template.yaml
+!config/template.*

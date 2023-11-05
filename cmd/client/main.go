@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	config, err := config.ParseByFlag("config")
+	config, err := config.Parse("config")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
