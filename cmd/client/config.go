@@ -14,8 +14,8 @@ type configClient struct {
 	c *config.Config
 }
 
-func (cc *configClient) Address() string {
-	return cc.c.Server.Address
+func (cc *configClient) ServerAddress() string {
+	return cc.c.Client.ServerAddress
 }
 
 func newConfigService(c *config.Config) *configService {

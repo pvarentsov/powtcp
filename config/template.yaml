@@ -30,6 +30,9 @@ client:
   # true|false
   log_json: false
 
+  # host:port
+  server_address: 127.0.0.1:8080
+
 hashcash:
   # number of zero bits in hashed code
   bits: 5

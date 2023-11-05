@@ -6,7 +6,7 @@ import (
 
 // Config - config interface
 type Config interface {
-	Address() string
+	ServerAddress() string
 }
 
 // Logger - logger interface

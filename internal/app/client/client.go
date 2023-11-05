@@ -15,7 +15,7 @@ type Opts struct {
 func Connect(opts Opts) error {
 	const op = "client.Connect"
 
-	conn, err := net.Dial("tcp", opts.Config.Address())
+	conn, err := net.Dial("tcp", opts.Config.ServerAddress())
 	if err != nil {
 		opts.Logger.Error(err.Error(), "op", op)
 		return err

@@ -3,5 +3,8 @@
         "*.go": "${capture}_test.go, ${capture}_mock.go",
         "go.mod": "go.sum"
     },
-    "yaml.schemaStore.enable": false
+    "yaml.schemaStore.enable": false,
+    "files.associations": {
+        "*.Dockerfile": "dockerfile"
+    }
 }

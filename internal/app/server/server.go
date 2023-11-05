@@ -100,5 +100,5 @@ func (s *Server) handleConnection(conn net.Conn) {
 		return
 	}
 
-	s.service.HandleMessages(conn.LocalAddr().String(), conn)
+	s.service.HandleMessages(conn.RemoteAddr().String(), conn)
 }

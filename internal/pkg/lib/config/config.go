@@ -20,8 +20,9 @@ type Config struct {
 	} `yaml:"server"`
 
 	Client struct {
-		LogLevel int  `yaml:"log_level"`
-		LogJson  bool `yaml:"log_json"`
+		LogLevel      int    `yaml:"log_level"`
+		LogJson       bool   `yaml:"log_json"`
+		ServerAddress string `yaml:"server_address"`
 	} `yaml:"client"`
 
 	Hashcash struct {
