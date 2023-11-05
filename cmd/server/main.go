@@ -29,7 +29,7 @@ func main() {
 
 	logger := log.New(log.Opts{
 		Level: log.Level(config.Server.LogLevel),
-		Json:  false,
+		Json:  config.Server.LogJson,
 	})
 
 	puzzleCache := cache.New[string, struct{}](ctx, cache.Opts{

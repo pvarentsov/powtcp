@@ -22,7 +22,7 @@ func main() {
 
 	logger := log.New(log.Opts{
 		Level: log.Level(config.Client.LogLevel),
-		Json:  false,
+		Json:  config.Client.LogJson,
 	})
 
 	service := service.NewClient(service.ClientOpts{
