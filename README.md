@@ -92,6 +92,4 @@ Server and client applications support configuring from `yaml` file or from envi
 * Run application passing a configuration file `./bin/client --config config.yaml`;
 * Or run using environment variables `./bin/client`.
 
-**Configuring templates**
-
-You can see templates in the [config](./config/) folder.
+**Configuring templates** are available in the [config](./config/) folder.
