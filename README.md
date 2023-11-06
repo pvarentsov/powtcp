@@ -12,6 +12,13 @@ The server and client communicate using an internal messaging protocol. Each mes
 
 A message consists of a command and a payload. They are separated by the `:` character. The payload can be any string without `\n` character. It's not very convenient in real life, but in this project all available payloads are fixed and don't contain `\n` character.
 
+Supported commands:
+* `0` - *Error*
+* `1` - *RequestPuzzle*
+* `2` - *ResponsePuzzle*
+* `3` - *RequestResource*
+* `4` - *ResponseResource*
+
 ### Makefile
 
 ```bash
