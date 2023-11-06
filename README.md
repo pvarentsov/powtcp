@@ -1,6 +1,6 @@
 # powtcp
 
-This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.org/wiki/Proof_of_work) protected TCP server. It implements chellenge-response protocol and uses [hashcash](https://en.wikipedia.org/wiki/Hashcash) algorithm.
+This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.org/wiki/Proof_of_work) protected TCP server. It implements challenge-response protocol and uses [hashcash](https://en.wikipedia.org/wiki/Hashcash) algorithm.
 
 <p align="center"> 
   <img src="assets/demo.png">
@@ -23,13 +23,13 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 
 ## PoW
 
-PoW is implemented with chellenge-response protocol:
+PoW is implemented with a challenge-response protocol:
 
-1. The client establishes a tcp connection with the server. The server starts to listen clients messages.
-2. The client sents the *RequestPuzzle* command (msg: `1:\n`).
-3. The server generates a new puzzle using a hashcash algorithm, stores this puzzle in the cache with some TTL and sends this one to the client (msg: `2:puzzle\n`).
-4. The client receives a puzzle and tries to compute a puzzle hash with enough number of zero bits in the beggining. Than the client requests a resource sending a solved puzzle (msg: `3:solved-puzzle\n`).
-5. The server receives the solved puzzle, checks TTL and sends a some resource if that puzzle was solved correctle (msg: `4:some-resource`).
+1. The client establishes a tcp connection with the server. The server starts to listening to client messages.
+2. The client sends the *RequestPuzzle* command (msg: `1:\n`).
+3. The server generates a new puzzle using a hashcash algorithm, stores this puzzle in the cache with some TTL and sends *ResponsePuzzle* command to the client (msg: `2:puzzle\n`).
+4. The client receives a puzzle and tries to compute a puzzle hash with enough number of zero bits in the beggining. Than the client requests a resource sending a solved puzzle in the *RequestResource* command (msg: `3:solved-puzzle\n`).
+5. The server receives the solved puzzle, checks TTL and sends *ResponseResource* command with some resource if that puzzle was solved correctly (msg: `4:some-resource`).
    
 
 ### Makefile
