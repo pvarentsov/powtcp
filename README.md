@@ -59,11 +59,6 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 
 ### Run via makefile
 
-* `make build-server` - build server application;
-* `make run-server` - run server application;
-* `make build-client` - build client application;
-* `make run-client` - run client application.
-
 ```bash
 $ make help
 
