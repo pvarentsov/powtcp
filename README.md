@@ -40,11 +40,26 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
    Message: `4:some-resource\n`.
    
 **Implementation**:
+
 * [`hashcash algorithm`](./internal/pkg/lib/hashcash/hashcash.go);
 * [`server service`](./internal/pkg/service/service_server.go);
 * [`client service`](./internal/pkg/service/service_client.go).
 
-### Makefile
+## How To
+
+#### Run via docker
+
+* `docker-compose up` - run client and server just for demo
+* `docker-compose up -d server` - run server listening on 8080 port
+
+#### Build from source code
+
+* `make build-server` - build server application
+* `make run-server` - run server application
+* `make build-client` - build client application
+* `make run-client` - run client application
+
+**Makefile help**
 
 ```bash
 $ make help
