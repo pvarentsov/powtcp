@@ -6,6 +6,11 @@ This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.o
   <img src="assets/demo.png">
 </p>
 
+## Protocol
+
+The server and client communicate using an internal messaging protocol. Each message ends with the `\n` character. It's used to separeate messages from each other.
+
+A message consists of a command and a payload. They are separated by the `:` character.
 
 ### Makefile
 
