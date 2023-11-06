@@ -11,9 +11,9 @@ services:
       SERVER_LOG_JSON: 'false'
       SERVER_ADDRESS: ':8080'
       SERVER_SHUTDOWN_TIMEOUT: '1000'
-      SERVER_CONNECTION_TIMEOUT: '2000'  
+      SERVER_CONNECTION_TIMEOUT: '30000'  
       HASHCASH_BITS: '5'
-      HASHCASH_TTL: '2000'
+      HASHCASH_TTL: '60000'
     ports:
       - 8080:8080  
 
@@ -26,6 +26,6 @@ services:
       CLIENT_LOG_LEVEL: '0'
       CLIENT_LOG_JSON: 'false'
       CLIENT_SERVER_ADDRESS: 'server:8080'
-      HASHCASH_COMPUTE_MAX_ATTEMPTS: '1000000'
+      HASHCASH_COMPUTE_MAX_ATTEMPTS: '100000000'
     depends_on:
       - server       

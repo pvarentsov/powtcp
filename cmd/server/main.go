@@ -37,11 +37,19 @@ func main() {
 		Logger:        logger,
 	})
 
+	resourceCache := cache.New[int, string](ctx, cache.Opts{
+		Logger: logger,
+	})
+	for i, r := range resources {
+		resourceCache.Add(i, r)
+	}
+
 	service := service.NewServer(service.ServerOpts{
-		Config:       configService,
-		Logger:       logger,
-		PuzzleCache:  puzzleCache,
-		ErrorChecker: tcp.NewConnErrorChecker(),
+		Config:        configService,
+		Logger:        logger,
+		PuzzleCache:   puzzleCache,
+		ResourceCache: resourceCache,
+		ErrorChecker:  tcp.NewConnErrorChecker(),
 	})
 
 	server, err := server.Listen(ctx, server.Opts{

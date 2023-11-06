@@ -19,7 +19,7 @@ type Server struct {
 	LogJson           bool   `yaml:"log_json" env:"LOG_JSON" env-default:"false"`
 	Address           string `yaml:"address" env:"ADDRESS" env-default:":8080"`
 	ShutdownTimeout   int    `yaml:"shutdown_timeout" env:"SHUTDOWN_TIMEOUT" env-default:"1000"`
-	ConnectionTimeout int    `yaml:"connection_timeout" env:"CONNECTION_TIMEOUT" env-default:"2000"`
+	ConnectionTimeout int    `yaml:"connection_timeout" env:"CONNECTION_TIMEOUT" env-default:"30000"`
 }
 
 // Client - client config structure
@@ -32,8 +32,8 @@ type Client struct {
 // Hashcash - Hashcash config structure
 type Hashcash struct {
 	Bits               int `yaml:"bits" env:"BITS" env-default:"5"`
-	ComputeMaxAttempts int `yaml:"compute_max_attempts"  env:"COMPUTE_MAX_ATTEMPTS" env-default:"1000000"`
-	TTL                int `yaml:"ttl"  env:"TTL" env-default:"2000"`
+	ComputeMaxAttempts int `yaml:"compute_max_attempts"  env:"COMPUTE_MAX_ATTEMPTS" env-default:"100000000"`
+	TTL                int `yaml:"ttl"  env:"TTL" env-default:"60000"`
 }
 
 // Parse - parse config from file by flag or from env or use default

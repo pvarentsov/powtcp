@@ -9,6 +9,12 @@ type PuzzleCache interface {
 	Delete(k string)
 }
 
+// ResourceCache - resource cache interface
+type ResourceCache interface {
+	Get(k int) (v string, ok bool)
+	Keys() []int
+}
+
 // Logger - logger interface
 type Logger interface {
 	Info(msg string, args ...any)

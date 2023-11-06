@@ -29,7 +29,7 @@ run-client:
 	@./bin/client
 
 powtcp:
-	@docker-compose up --build
+	@docker-compose up
 
 test:
 	@go test ./... -v

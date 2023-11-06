@@ -15,7 +15,7 @@ server:
   shutdown_timeout: 2000
 
   # in ms
-  connection_timeout: 60000
+  connection_timeout: 30000
 
   # in ms
   puzzle_clear_interval: 2000
@@ -41,4 +41,4 @@ hashcash:
   compute_max_attempts: 100000000
 
   # in ms
-  ttl: 2000
+  ttl: 60000

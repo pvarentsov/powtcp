@@ -2,7 +2,9 @@ package service
 
 import (
 	"bufio"
+	"crypto/rand"
 	"io"
+	"math/big"
 	"time"
 
 	"github.com/pvarentsov/powtcp/internal/pkg/lib/hashcash"
@@ -11,28 +13,31 @@ import (
 
 // Opts - options to create new cache instance
 type ServerOpts struct {
-	Logger       Logger
-	Config       ServerConfig
-	PuzzleCache  PuzzleCache
-	ErrorChecker ErrorChecker
+	Logger        Logger
+	Config        ServerConfig
+	PuzzleCache   PuzzleCache
+	ResourceCache ResourceCache
+	ErrorChecker  ErrorChecker
 }
 
 // NewServer - create new server-side service
 func NewServer(opts ServerOpts) *Server {
 	return &Server{
-		logger:       opts.Logger,
-		config:       opts.Config,
-		puzzleCache:  opts.PuzzleCache,
-		errorChecker: opts.ErrorChecker,
+		logger:        opts.Logger,
+		config:        opts.Config,
+		puzzleCache:   opts.PuzzleCache,
+		resourceCache: opts.ResourceCache,
+		errorChecker:  opts.ErrorChecker,
 	}
 }
 
 // Server - server-side service
 type Server struct {
-	logger       Logger
-	config       ServerConfig
-	puzzleCache  PuzzleCache
-	errorChecker ErrorChecker
+	logger        Logger
+	config        ServerConfig
+	puzzleCache   PuzzleCache
+	resourceCache ResourceCache
+	errorChecker  ErrorChecker
 }
 
 // HandleMessages - handle client messages
@@ -140,14 +145,38 @@ func (s *Server) responseResource(clientID string, payload string, w io.Writer) 
 		return
 	}
 
+	resource, err := s.randomResource()
+	if err != nil {
+		s.logger.Error(err.Error(), "op", op, "clientID", clientID)
+		s.writeError(clientID, ErrInternalError, w)
+		return
+	}
+
 	msg := message.Message{
 		Command: message.CommandResponseResource,
-		Payload: "resource",
+		Payload: resource,
 	}
 
 	s.writeMsg(clientID, msg, w)
 	s.puzzleCache.Delete(hashcash.Key())
 	s.logger.Info("resource sent", "clientID", clientID, "resource", msg.Payload)
+}
+
+func (s *Server) randomResource() (string, error) {
+	keys := s.resourceCache.Keys()
+	if len(keys) == 0 {
+		return "", nil
+	}
+
+	randKeyIndex, err := rand.Int(rand.Reader, big.NewInt(int64(len(keys))))
+	if err != nil {
+		return "", err
+	}
+
+	key := int(randKeyIndex.Int64())
+	resource, _ := s.resourceCache.Get(key)
+
+	return resource, nil
 }
 
 func (s *Server) writeMsg(clientID string, msg message.Message, w io.Writer) {

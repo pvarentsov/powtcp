@@ -6,10 +6,8 @@ import (
 	"time"
 )
 
-var defaultCleanInterval = 3000 * time.Millisecond
-
 // Opts - options to create new cache instance
-// CleanInterval - uses default if target <= 0
+// CleanInterval - uses if value > 0
 type Opts struct {
 	CleanInterval time.Duration
 	Logger        Logger
@@ -21,11 +19,9 @@ func New[K comparable, V any](ctx context.Context, opts Opts) *Cache[K, V] {
 		cache:  make(map[K]value[V]),
 		logger: opts.Logger,
 	}
-	if opts.CleanInterval < 0 {
-		opts.CleanInterval = defaultCleanInterval
+	if opts.CleanInterval > 0 {
+		go c.runCleaner(ctx, opts.CleanInterval)
 	}
-
-	go c.runCleaner(ctx, opts.CleanInterval)
 
 	return c
 }

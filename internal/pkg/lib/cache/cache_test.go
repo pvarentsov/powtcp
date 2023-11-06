@@ -14,7 +14,7 @@ func Test_Cache(t *testing.T) {
 		logger := &mockLogger{}
 
 		c := New[string, string](ctx, Opts{
-			CleanInterval: 1000,
+			CleanInterval: 1000 * time.Millisecond,
 			Logger:        logger,
 		})
 
