@@ -6,11 +6,11 @@ This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.o
   <img src="assets/demo.png">
 </p>
 
-## Protocol
+## Messaging protocol
 
 The server and client communicate using an internal messaging protocol. Each message ends with the `\n` character. It's used to separeate messages from each other.
 
-A message consists of a command and a payload. They are separated by the `:` character. The payload can be any string without `\n` character. It's not very convenient in real life, but there are no conflicts related to the `\n` character in this project.
+A message consists of a command and a payload. They are separated by the `:` character. The payload can be any string without `\n` character. It's not very convenient in real life, but in this project all available payloads are fixed and don't contain `\n` character.
 
 ### Makefile
 
