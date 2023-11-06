@@ -81,9 +81,9 @@ Commands:
  fmt                   Format code
 ```
 
-### Configuring
+### Configuration
 
-Server and client applications support configuring from `yaml` file or from environment variables. Applications use [default configuring](./internal/pkg/lib/config/config.go) if a custom configuration is not passed.
+Server and client applications support configuration from `yaml` file or from environment variables. Applications use [default configuration](./internal/pkg/lib/config/config.go) if a custom configuration is not passed.
 
 **Server**
 
