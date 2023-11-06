@@ -13,11 +13,11 @@ The server and client communicate using an internal messaging protocol. Each mes
 A message consists of a command and a payload. They are separated by the `:` character. The payload can be any string without `\n` character. It's not very convenient in real life, but in this project all available payloads are fixed and don't contain `\n` character.
 
 Supported commands:
-* `0` - *`Error`* (`server -> client`);
-* `1` - *`RequestPuzzle`* (`client -> server`);
-* `2` - *`ResponsePuzzle`* (`server -> client`);
-* `3` - *`RequestResource`* (`client -> server`);
-* `4` - *`ResponseResource`* (`server -> client`).
+* `0` - *`Error`* (server -> client);
+* `1` - *`RequestPuzzle`* (client -> server);
+* `2` - *`ResponsePuzzle`* (server -> client);
+* `3` - *`RequestResource`* (client -> server);
+* `4` - *`ResponseResource`* (server -> client).
 
 A messaging is implemented in the [`message`](./internal/pkg/lib/message/message.go) package.
 
