@@ -6,7 +6,7 @@ This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.o
   <img src="assets/demo.png">
 </p>
 
-## Messaging protocol
+## Messaging
 
 The server and client communicate using an internal messaging protocol. Each message ends with the `\n` character. It's used to separeate messages from each other.
 
@@ -18,6 +18,10 @@ Supported commands:
 * `2` - *ResponsePuzzle*
 * `3` - *RequestResource*
 * `4` - *ResponseResource*
+
+A messaging is implemented in the [`message`](./internal/pkg/lib/message/message.go) package.
+
+## PoW
 
 ### Makefile
 
