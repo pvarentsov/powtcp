@@ -31,6 +31,10 @@ PoW is implemented with a challenge-response protocol:
 4. The client receives a puzzle and tries to compute a puzzle hash with enough number of zero bits in the beggining. Than the client requests a resource sending a solved puzzle in the *`RequestResource`* command (msg: `3:solved-puzzle\n`).
 5. The server receives the solved puzzle, checks TTL and sends *`ResponseResource`* command with some resource if that puzzle was solved correctly (msg: `4:some-resource\n`).
    
+Implementation:
+* [hashcash algorithm](./internal/pkg/lib/hashcash/hashcash.go)
+* [server service](./internal/pkg/service/service_server.go)
+* [client service](./internal/pkg/service/service_client.go)
 
 ### Makefile
 
