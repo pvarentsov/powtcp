@@ -52,14 +52,12 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 * `docker-compose up` - run client and server just for demo;
 * `docker-compose up -d server` - run server listening on 8080 port.
 
-### Build from source code
+### Run via makefile
 
 * `make build-server` - build server application;
 * `make run-server` - run server application;
 * `make build-client` - build client application;
 * `make run-client` - run client application.
-
-**Makefile help**
 
 ```bash
 $ make help
@@ -77,3 +75,23 @@ Commands:
  test                  Run tests
  fmt                   Format code
 ```
+
+### Configuring
+
+Server and client applications support configuring from `yaml` file or from environment variables. Applications use default configuring if a custom configuration is not passed.
+
+**Server**
+
+* Build application via `go build -o ./bin/server ./cmd/server/*.go` command;
+* Run application passing a configuration file `./bin/server --config config.yaml`;
+* Or run using environment variables `./bin/server`.
+
+**Client**
+
+* Build application via `go build -o ./bin/client ./cmd/client/*.go` command;
+* Run application passing a configuration file `./bin/client --config config.yaml`;
+* Or run using environment variables `./bin/client`.
+
+**Configuring templates**
+
+You can see templates in the [config](./config/) folder.
