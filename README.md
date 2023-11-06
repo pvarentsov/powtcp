@@ -47,6 +47,11 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 
 ## How To
 
+### Requirements
+
+* [Go 1.21+](https://go.dev/doc/install);
+* [Docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
+
 ### Run via docker
 
 * `docker-compose up` - run client and server just for demo;
