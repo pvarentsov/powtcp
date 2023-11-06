@@ -1,6 +1,6 @@
 # powtcp
 
-> Proof of Work protected TCP server.
+This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.org/wiki/Proof_of_work) protected.
 
 <p align="center"> 
   <img src="assets/demo.png">
