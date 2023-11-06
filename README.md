@@ -26,19 +26,15 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 **PoW** is implemented with a challenge-response protocol:
 
 1. The client establishes a tcp connection with the server. The server starts to listening to client messages.
-
 2. The client sends the *`RequestPuzzle`* command to receive a puzzle from server.
 
    Message: `1:\n`
-
-3. The server generates a new puzzle using a hashcash algorithm, stores this puzzle in the cache with some TTL and sends the *`ResponsePuzzle`* command to the client.
+3. The server generates a new puzzle using a hashcash algorithm, stores a puzzle in the cache with some TTL and sends the *`ResponsePuzzle`* command with this puzzle to the client.
 
    Message: `2:puzzle\n`
-
 4. The client receives a puzzle and tries to compute a puzzle hash with enough number of zero bits in the beggining. Than the client requests a resource sending a solved puzzle in the *`RequestResource`* command.
 
    Message: `3:solved-puzzle\n`
-
 5. The server receives the solved puzzle, checks TTL and sends *`ResponseResource`* command with some resource if that puzzle was solved correctly.
 
    Message: `4:some-resource\n`
