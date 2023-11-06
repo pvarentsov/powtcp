@@ -28,11 +28,12 @@ run-server:
 run-client:
 	@./bin/client
 
-powtcp:
-	@docker-compose up
-
 test:
 	@go test ./... -v
 
 fmt:
 	@go fmt ./...
+
+# used just for demp
+powtcp:
+	@docker-compose up	

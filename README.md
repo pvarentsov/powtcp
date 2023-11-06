@@ -1,10 +1,11 @@
 # powtcp
 
-This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.org/wiki/Proof_of_work) protected TCP server.
+This project is a simple example of [Proof of work (PoW)](https://en.wikipedia.org/wiki/Proof_of_work) protected TCP server. It implements chellenge-response protocol and uses [hashcash](https://en.wikipedia.org/wiki/Hashcash) algorithm.
 
 <p align="center"> 
   <img src="assets/demo.png">
 </p>
+
 
 ### Makefile
 
