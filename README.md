@@ -23,7 +23,7 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 
 ## PoW
 
-PoW is implemented with a challenge-response protocol:
+**PoW** is implemented with a challenge-response protocol:
 
 1. The client establishes a tcp connection with the server. The server starts to listening to client messages.
 
@@ -43,7 +43,7 @@ PoW is implemented with a challenge-response protocol:
 
    Message: `4:some-resource\n`
    
-Implementation:
+**Implementation**:
 * [`hashcash algorithm`](./internal/pkg/lib/hashcash/hashcash.go);
 * [`server service`](./internal/pkg/service/service_server.go);
 * [`client service`](./internal/pkg/service/service_client.go).
