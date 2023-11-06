@@ -88,13 +88,13 @@ Server and client applications support configuration from `yaml` file or from en
 **Server**
 
 * Build application: `go build -o ./bin/server ./cmd/server/*.go`;
-* Run application passing a config file: `./bin/server --config config.yaml`;
+* Run application passing a config file: `./bin/server --config config.[yaml|env]`;
 * Or run using environment variables: `./bin/server`.
 
 **Client**
 
 * Build application: `go build -o ./bin/client ./cmd/client/*.go`;
-* Run application passing a config file: `./bin/client --config config.yaml`;
+* Run application passing a config file: `./bin/client --config config.[yaml|env]`;
 * Or run using environment variables: `./bin/client`.
 
 **Config templates** are available in the [config](./config/) folder.
