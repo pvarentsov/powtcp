@@ -78,18 +78,18 @@ Commands:
 
 ### Configuring
 
-Server and client applications support configuring from `yaml` file or from environment variables. Applications use default configuring if a custom configuration is not passed.
+Server and client applications support configuring from `yaml` file or from environment variables. Applications use [default configuring](./internal/pkg/lib/config/config.go) if a custom configuration is not passed.
 
 **Server**
 
 * Build application: `go build -o ./bin/server ./cmd/server/*.go`;
-* Run application passing a configuration file: `./bin/server --config config.yaml`;
+* Run application passing a config file: `./bin/server --config config.yaml`;
 * Or run using environment variables: `./bin/server`.
 
 **Client**
 
-* Build application `go build -o ./bin/client ./cmd/client/*.go`;
-* Run application passing a configuration file: `./bin/client --config config.yaml`;
+* Build application: `go build -o ./bin/client ./cmd/client/*.go`;
+* Run application passing a config file: `./bin/client --config config.yaml`;
 * Or run using environment variables: `./bin/client`.
 
-**Configuring templates** are available in the [config](./config/) folder.
+**Config templates** are available in the [config](./config/) folder.
