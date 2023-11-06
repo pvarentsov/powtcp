@@ -32,9 +32,9 @@ PoW is implemented with a challenge-response protocol:
 5. The server receives the solved puzzle, checks TTL and sends *`ResponseResource`* command with some resource if that puzzle was solved correctly (msg: `4:some-resource\n`).
    
 Implementation:
-* [hashcash algorithm](./internal/pkg/lib/hashcash/hashcash.go)
-* [server service](./internal/pkg/service/service_server.go)
-* [client service](./internal/pkg/service/service_client.go)
+* [`hashcash algorithm`](./internal/pkg/lib/hashcash/hashcash.go);
+* [`server service`](./internal/pkg/service/service_server.go);
+* [`client service`](./internal/pkg/service/service_client.go).
 
 ### Makefile
 
