@@ -15,13 +15,13 @@ const (
 	// CommandRequestPuzzle - using when client requests puzzle from server
 	CommandRequestPuzzle
 
-	// CommandResponsePuzzle - using when server sents puzzle to client
+	// CommandResponsePuzzle - using when server sends puzzle to client
 	CommandResponsePuzzle
 
 	// CommandRequestResource - using when client requests resource from server
 	CommandRequestResource
 
-	// CommandResponseResource - using when server sents resource to client
+	// CommandResponseResource - using when server sends resource to client
 	CommandResponseResource
 )
 
