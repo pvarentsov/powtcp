@@ -78,7 +78,7 @@ Commands:
 
 ### Configuration
 
-Server and client applications support configuration from `yaml` file or from environment variables. Applications use [default configuration](./internal/pkg/lib/config/config.go) if a custom configuration is not passed.
+Server and client applications support configuration from `.yaml` or `.env` files or from environment variables. Applications use [default configuration](./internal/pkg/lib/config/config.go) if a custom configuration not passed.
 
 **Server**
 
@@ -92,4 +92,4 @@ Server and client applications support configuration from `yaml` file or from en
 * Run application passing a config file: `./bin/client --config config.[yaml|env]`;
 * Or run using environment variables: `./bin/client`.
 
-**Config templates** are available in the [config](./config/) folder.
+**Templates** are available in the [config](./config/) folder.
