@@ -56,10 +56,10 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 
 ```bash
 # Run client and server just for demo
-docker-compose up
+$ docker-compose up
 
 # Run server listening on 8080 port
-docker-compose up -d server
+$ docker-compose up -d server
 ```
 
 ### Makefile
@@ -85,16 +85,16 @@ Commands:
 
 ```bash
 # Build server
-go build -o ./bin/server ./cmd/server/*.go
+$ go build -o ./bin/server ./cmd/server/*.go
 
 # Build client
-go build -o ./bin/client ./cmd/client/*.go
+$ go build -o ./bin/client ./cmd/client/*.go
 
 # Run server
-./bin/server
+$ ./bin/server
 
 # Run client
-./bin/client
+$ ./bin/client
 ```
 
 ### Configuration
@@ -105,26 +105,26 @@ Server and client applications support configuration from `.yaml` or `.env` file
 
 ```bash
 # Run server passing yaml config file
-./bin/server --config config.yaml
+$ ./bin/server --config config.yaml
 
 # Run server passing env config file
-./bin/server --config config.env
+$ ./bin/server --config config.env
 
 # Or run server using environment variables
-./bin/server
+$ ./bin/server
 ```
 
 **Client**
 
 ```bash
 # Run client passing yaml config file
-./bin/client --config config.yaml
+$ ./bin/client --config config.yaml
 
 # Run client passing env config file
-./bin/client --config config.env
+$ ./bin/client --config config.env
 
 # Or run client using environment variables
-./bin/client
+$ ./bin/client
 ```
 
 **Templates** are available in the [config](./config/) folder.
