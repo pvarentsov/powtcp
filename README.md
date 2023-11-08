@@ -52,12 +52,17 @@ A messaging is implemented in the [`message`](./internal/pkg/lib/message/message
 * [Go 1.21+](https://go.dev/doc/install);
 * [Docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-### Run via docker
+### Docker
 
-* `docker-compose up` - run client and server just for demo;
-* `docker-compose up -d server` - run server listening on 8080 port.
+```bash
+# Run client and server just for demo
+docker-compose up
 
-### Run via makefile
+# Run server listening on 8080 port
+docker-compose up -d server
+```
+
+### Makefile
 
 ```bash
 $ make help
@@ -76,20 +81,50 @@ Commands:
  fmt                   Format code
 ```
 
+### Go
+
+```bash
+# Build server
+go build -o ./bin/server ./cmd/server/*.go
+
+# Build client
+go build -o ./bin/client ./cmd/client/*.go
+
+# Run server
+./bin/server
+
+# Run client
+./bin/client
+```
+
 ### Configuration
 
 Server and client applications support configuration from `.yaml` or `.env` files or from environment variables. Applications use [default configuration](./internal/pkg/lib/config/config.go) if a custom configuration not passed.
 
 **Server**
 
-* Build application: `go build -o ./bin/server ./cmd/server/*.go`;
-* Run application passing a config file: `./bin/server --config config.[yaml|env]`;
-* Or run using environment variables: `./bin/server`.
+```bash
+# Run server passing yaml config file
+./bin/server --config config.yaml
+
+# Run server passing env config file
+./bin/server --config config.env
+
+# Or run server using environment variables
+./bin/server
+```
 
 **Client**
 
-* Build application: `go build -o ./bin/client ./cmd/client/*.go`;
-* Run application passing a config file: `./bin/client --config config.[yaml|env]`;
-* Or run using environment variables: `./bin/client`.
+```bash
+# Run client passing yaml config file
+./bin/client --config config.yaml
+
+# Run client passing env config file
+./bin/client --config config.env
+
+# Or run client using environment variables
+./bin/client
+```
 
 **Templates** are available in the [config](./config/) folder.
